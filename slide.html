@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>slide</title>
+    <script src="jQuery.js"></script>
+</head>
+<body>
+    <h1 id="title">这是一群猫</h1>
+    <div class="div1"></div>
+    <script>
+        var newSlide = function(element,images){
+            var slideCss = `
+                <style media="screen">
+                    .vertical-center {
+                        top: 50%;
+                        position: relative;
+                        transform: translateY(-50%);
+                    }
+                    .slide {
+                        width: 200px;
+                        height: 300px;
+                        overflow: hidden;
+                    }
+                    .slide-images {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                    }
+                    .slide-img {
+                        display: none;
+                    }
+                    .slide-img-active {
+                        display: block;
+                    }
+                    .slide-button-active {
+                        opacity: 0.6
+                    }
+                    .slide-button-hidden {
+                        opacity: 0;
+                    }
+                    .slide-button {
+                        position: absolute;
+                        padding: 15px 5px;
+                        color: white;
+                        background: black;
+                        border: 0;
+                    }
+                    .slide-button-left {
+                        left: 0;
+                    }
+                    .slide-button-right {
+                        right: 0;
+                    }
+                    .slide-index {
+                        bottom: 20px;
+                        position: relative;
+                        text-align: center;
+                    }
+                    .slide-i {
+                        display: inline-block;
+                        background: gray;
+                        color: white;
+                        border-radius: 50%;
+                        padding: 0 5px;
+                    }
+                    .slide-i-active {
+                        background: white;
+                        color: black;
+                    }
+                </style>
+                `
+            $("head").append(slideCss)
+            var slideContainer = `
+                <div class="slide">
+                    <div class="slide-images" data-imgs="${images.length}" data-active="0">
+                        <button class="slide-button slide-button-hidden slide-button-left vertical-center"><</button>
+                        <button class="slide-button slide-button-hidden slide-button-right vertical-center">></button>
+                    </div>
+                    <div class="slide-index">
+                    </div>
+                </div>
+                `
+            element.append(slideContainer)
+            for(var i = 0; i < images.length; i++) {
+                var t1 = `
+                <img class="slide-img" src=${images[i]} alt="picture${i}">
+                `
+                var log = function(){
+                    console.log.apply(console, arguments)
+                }
+                $(".slide-images").append(t1)
+                var t2 = `
+                <div class="slide-i" data-tips="${i}">${i + 1}</div>
+                `
+                $(".slide-index").append(t2)
+            }
+            $($(".slide-img")[0]).addClass("slide-img-active")
+            $($(".slide-i")[0]).addClass("slide-i-active")
+            var play = function(offset) {
+                var activeIndex = $(".slide-images").data("active")
+                var numberOfImgs = $(".slide-images").data("imgs")
+                var i = (activeIndex + offset + numberOfImgs) % numberOfImgs
+                $(".slide-images").data('active',i)
+                $(".slide-img-active").fadeOut()
+                $(".slide-img-active").removeClass("slide-img-active")
+                var active = $($(".slide-img")[i])
+                active.addClass("slide-img-active")
+                active.fadeIn()
+                $(".slide-i-active").removeClass("slide-i-active")
+                $($(".slide-i")[i]).addClass("slide-i-active")
+            }
+            var playPrev = function() {
+                play(-1)
+            }
+            var playNext = function() {
+                play(1)
+            }
+            $(".slide-button").on("click",function(event){
+                var button = $(event.target)
+                if(button.hasClass("slide-button-left")) {
+                    playPrev()
+                } else {
+                    playNext()
+                }
+            })
+            var jumpImg = function(n) {
+                $(".slide-images").data('active',n)
+                $(".slide-img-active").fadeOut()
+                $(".slide-img-active").removeClass("slide-img-active")
+                var active = $($(".slide-img")[n])
+                active.addClass("slide-img-active")
+                active.fadeIn()
+                $(".slide-i-active").removeClass("slide-i-active")
+                $($(".slide-i")[n]).addClass("slide-i-active")
+            }
+
+            $(".slide-i").on("mouseover",function(event){
+                // log($(event.target).data("tips"))
+                jumpImg($(event.target).data("tips"))
+            })
+            $(".slide-images").on("mouseover",function(){
+                $(".slide-button").removeClass("slide-button-hidden")
+                $(".slide-button").addClass("slide-button-active")
+                clearInterval(playSlide)
+            })
+            $(".slide-images").on("mouseout",function(){
+                $(".slide-button").removeClass("slide-button-active")
+                $(".slide-button").addClass("slide-button-hidden")
+                playSlide = setInterval(playNext,2000)
+            })
+            var playSlide = setInterval(playNext,2000)
+        }
+        var ne = $(".div1")
+        var imagesURL = ["cat000.gif","cat001.gif","cat002.gif","cat003.gif",]
+        newSlide(ne,imagesURL)
+    </script>
+</body>
+</html>
