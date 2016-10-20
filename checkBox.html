@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>复选框</title>
+    <script src="jQuery.js"></script>
+</head>
+<body>
+    <h2>选择你喜欢的水果</h2>
+    <div class="div1">
+    </div>
+    <h2>选择你喜欢的水果</h2>
+    <div class="div2">
+    </div>
+    <h2>选择你喜欢的水果</h2>
+    <div class="div3">
+    </div>
+    <h2>选择你喜欢的水果</h2>
+    <div class="div4">
+    </div>
+
+    <script>
+        var options = ['Apple','Banana','Orange','Pear','Watermelon',]
+        var GuaOptions1 = function(element,options) {
+            for (var i = 0; i < options.length; i++) {
+                var t = `
+                <input class=checkbox type="checkbox" name="checkbox1">${options[i]}<br>
+                `
+                element.append(t)
+            }
+        }
+        GuaOptions1($(".div1"),options)
+
+        var GuaOptions2 = function(element,options) {
+            for (var i = 0; i < options.length; i++) {
+                var t = `
+                <input type="checkbox" name="checkbox2">${options[i]}<br>
+                `
+                element.append(t)
+            }
+            var o = `
+            <div class="checkBox-button">
+                <button class="choose-all">全选</button>
+                <button class="cancel-all">反选</button>
+            </div>
+            `
+            element.append(o)
+            $(".choose-all").on("click",function() {
+                $("[name='checkbox2']").prop("checked",true)
+            })
+            $(".cancel-all").on("click",function() {
+                $("[name='checkbox2']").each(function() {
+                    if($(this).prop("checked") == true) {
+                        $(this).prop("checked",false)
+                    }else {
+                        $(this).prop("checked",true)
+                    }
+                })
+            })
+        }
+        GuaOptions2($(".div2"),options)
+
+        var GuaOptions3 = function(element,options) {
+            for (var i = 0; i < options.length; i++) {
+                var t = `
+                <input type="checkbox" name="checkbox3">${options[i].text}<br>
+                `
+                element.append(t)
+                $($("[name='checkbox3']")[i]).prop("checked",options2[i].checked)
+            }
+            var o = `
+            <div class="checkBox-button">
+                <button class="choose-all">全选</button>
+                <button class="cancel-all">反选</button>
+            </div>
+            `
+            element.append(o)
+            $(".choose-all").on("click",function() {
+                $("[name='checkbox3']").prop("checked",true)
+            })
+            $(".cancel-all").on("click",function() {
+                $("[name='checkbox3']").each(function() {
+                    if($(this).prop("checked") == true) {
+                        $(this).prop("checked",false)
+                    }else {
+                        $(this).prop("checked",true)
+                    }
+                })
+            })
+        }
+        var options2 =[
+            {'text':'Apple','checked':true},
+            {'text':'Banana','checked':true},
+            {'text':'Orange','checked':true},
+            {'text':'Pear','checked':false},
+            {'text':'Watermelon','checked':false},
+        ]
+        GuaOptions3($(".div3"),options2)
+
+        var GuaOptions4 = function(element,options) {
+            for (var i = 0; i < options.length; i++) {
+                var t = `<div class="check-box">
+                <input type="checkbox" name="checkbox4" value=${options[i].text}>${options[i].text}<br>
+                </div>
+                `
+                element.append(t)
+                $($("[name='checkbox4']")[i]).prop("checked",options2[i].checked)
+            }
+            var o = `
+            <div class="checkBox-button">
+                <button class="choose-all">全选</button>
+                <button class="cancel-all">反选</button>
+                <button class="save">保存</button>
+                <button class="load">读取</button>
+            </div>
+            `
+            element.append(o)
+            $(".choose-all").on("click",function() {
+                $("[name='checkbox4']").prop("checked",true)
+            })
+            $(".cancel-all").on("click",function() {
+                $("[name='checkbox4']").each(function() {
+                    if($(this).prop("checked") == true) {
+                        $(this).prop("checked",false)
+                    }else {
+                        $(this).prop("checked",true)
+                    }
+                })
+            })
+            $(".save").on("click",function() {
+                for(var i = 0; i < $("[name='checkbox4']").length; i++) {
+                    optionSave[i] = {"text":$($("[name='checkbox4']")[i]).val(),"checked":$($("[name='checkbox4']")[i]).prop("checked")}
+                }
+                var c = JSON.stringify(optionSave)
+                localStorage.optionSave = c
+            })
+            $(".load").on("click",function() {
+                var c = JSON.parse(localStorage.optionSave)
+                for(var i = 0; i < c.length; i++) {
+                    $($("[name='checkbox4']")[i]).prop("checked",c[i].checked)
+                }
+            })
+        }
+        var optionSave = []
+        GuaOptions4($(".div4"),options2)
+
+    </script>
+</body>
+</html>
