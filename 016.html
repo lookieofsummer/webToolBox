@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jQuery.js"></script>
+    <style>
+    body{
+        margin: 0;
+    }
+    .input-box{
+        width: 300px;
+        height: 150px;
+        border: 3px solid lightblue;
+        display: block;
+    }
+    .reply-btn{
+        position: absolute;
+        left: 246px;
+        margin: 5px 0px;
+        height: 30px;
+        width: 60px;
+        background: lightblue;
+        color: white;
+        border-radius: 10%;
+        border: lightblue;
+    }
+    .reply-box{
+        display: block;
+        position: relative;
+        top: 40px;
+        border: solid black 1px;
+        width: 304px;
+    }
+    .reply-i{
+
+    }
+    .reply-text{
+        display: inline-block;
+        position: absolute;
+    }
+    </style>
+</head>
+<body>
+    <div class="input">
+        <input class="input-box" type="text">
+        <button class="reply-btn">提交</button>
+        <span class="numTips">还可以输入140字</span>
+    </div>
+    <div class="reply-box">
+        <div class="reply-i">
+            <img class="reply-avatar"src="default.png" alt="用户头像">
+            <span class="reply-text">用户1：今天天气不错啊</span><br>
+            <span class="reply-date">10月22日</span>
+        </div>
+    </div>
+    <script>
+    $(".input-box").on("keyup",function() {
+        var t = `
+        <span class="numTips">还可以输入${140 - $(".input-box").val().length}字</span>
+        `
+        // var n = 140 - $(".input-box").val().length
+        $(".numTips").remove()
+        $(".input").append(t)
+    })
+    $(".reply-btn").on("click",function() {
+        var t = `
+        <div class="reply-i">
+            <img class="reply-avatar"src="default.png" alt="用户头像">
+            <span class="reply-text">用户1：${$(".input-box").val()}</span><br>
+            <span class="reply-date">10月22日</span>
+        </div>
+        `
+        $(".reply-box").append(t)
+        $(".input-box").val("")
+        $(".input-box").keyup()
+    })
+    </script>
+</body>
+</html>
